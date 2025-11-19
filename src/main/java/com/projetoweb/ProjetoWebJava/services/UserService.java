@@ -3,11 +3,13 @@ package com.projetoweb.ProjetoWebJava.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.projetoweb.ProjetoWebJava.entities.User;
 import com.projetoweb.ProjetoWebJava.repositories.UserRepository;
+import com.projetoweb.ProjetoWebJava.services.exceptions.DatabaseException;
 import com.projetoweb.ProjetoWebJava.services.exceptions.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
@@ -36,6 +38,8 @@ public class UserService {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException e) {
+        	throw new DatabaseException(e.getMessage());
         }
     }
     
